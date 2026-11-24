@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: portfolio-contact-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://your-portfolio.vercel.app
+      - key: TRUST_PROXY
+        value: "true"
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USERNAME
+        value: friendrest7@gmail.com
+      - key: CONTACT_FROM
+        value: friendrest7@gmail.com
+      - key: CONTACT_TO
+        value: friendrest7@gmail.com
+      - key: SMTP_PASSWORD
+        sync: false

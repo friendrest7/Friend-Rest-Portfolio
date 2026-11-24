@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — dark first. Light theme via [data-theme="light"].
+   --------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+  --bg: #000000;
+  --bg-elev: #070707;
+  --surface: #0d0d0c;
+  --surface-2: #151514;
+  --border: rgb(255 255 255 / 0.1);
+  --border-strong: rgb(255 255 255 / 0.18);
+  --fg: #fafaf7;
+  --fg-muted: #cfcec7;
+  --fg-subtle: #a9a8a1;
+  --accent: #b7f36b;
+  --accent-strong: #c9ff85;
+  --accent-fg: #0b0c08;
+  --accent-soft: rgb(183 243 107 / 0.1);
+  --accent-line: rgb(183 243 107 / 0.35);
+  --grid-line: rgb(255 255 255 / 0.035);
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 20px 40px -24px rgb(0 0 0 / 0.8);
+  --warn: #f5c451;
+  --danger: #f87171;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f5f0;
+  --bg-elev: #efeee8;
+  --surface: #ffffff;
+  --surface-2: #f3f2ec;
+  --border: rgb(18 18 16 / 0.09);
+  --border-strong: rgb(18 18 16 / 0.17);
+  --fg: #000000;
+  --fg-muted: #2f2e2a;
+  --fg-subtle: #4a4944;
+  --accent: #3c7a10;
+  --accent-strong: #2f640a;
+  --accent-fg: #ffffff;
+  --accent-soft: rgb(60 122 16 / 0.09);
+  --accent-line: rgb(60 122 16 / 0.35);
+  --grid-line: rgb(18 18 16 / 0.05);
+  --shadow: 0 1px 2px rgb(18 18 16 / 0.04), 0 16px 32px -24px rgb(18 18 16 / 0.25);
+  --warn: #a16207;
+  --danger: #b91c1c;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+/* ---------------------------------------------------------------------------
+   Background: hairline grid with a soft radial fade, plus a slow accent glow
+   --------------------------------------------------------------------------- */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+.glow {
+  background: radial-gradient(closest-side, var(--accent-soft), transparent);
+  animation: drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-6%, -4%, 0) scale(1); }
+  to { transform: translate3d(8%, 6%, 0) scale(1.15); }
+}
+
+/* Small reusable text treatments */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.card-hover {
+  transition: border-color 200ms ease, transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 200ms ease;
+}
+.card-hover:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+}
+
+/* Live status pulse */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  80%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* Scroll reveal (progressive enhancement: content is visible without JS) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Page transition */
+.page-enter {
+  animation: page-in 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Hide scrollbar for horizontal chip rows */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .glow { animation: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Print (resume page)
+   --------------------------------------------------------------------------- */
+@media print {
+  :root, :root[data-theme="light"] {
+    --bg: #fff; --surface: #fff; --surface-2: #fff; --fg: #111; --fg-muted: #333; --fg-subtle: #555;
+    --border: #ddd; --border-strong: #bbb; --accent: #2f640a; --accent-soft: transparent;
+  }
+  @page { size: A4; margin: 12mm 13mm; }
+  body { background: #fff; font-size: 9.5pt; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  a { color: inherit; text-decoration: none; }
+  .resume-item { break-inside: avoid; }
+}
+.print-only { display: none; }
